@@ -53,14 +53,19 @@ def Readfiche(post_id):
     return render_template('read_data.html', data=data)
     
 @app.route('/fiche_nom/<nom>')
-def ReadficheNom(nom):
-    if not est_authentifie():
+def fiche_nom(nom):
+    # Vérification de l'authentification globale
+    if not session.get('authentifie'):
         return redirect(url_for('authentification'))
+    
+    # Vérification spécifique à l'exercice 2 : seul 'user' peut voir cette page
+    if session.get('username') != 'user':
+        return "Accès refusé : Cette zone est réservée à l'utilisateur 'user'.", 403
 
+    # Logique de recherche dans la base de données (Exercice 1)
     conn = sqlite3.connect('database.db')
     cursor = conn.cursor()
-    # Utilisation de LIKE pour une recherche plus flexible (ex: 'DUPONT')
-    cursor.execute('SELECT * FROM clients WHERE nom LIKE ?', (nom,))
+    cursor.execute('SELECT * FROM clients WHERE nom = ?', (nom,))
     data = cursor.fetchall()
     conn.close()
     
