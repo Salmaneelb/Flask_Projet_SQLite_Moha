@@ -28,13 +28,16 @@ def lecture():
 @app.route('/authentification', methods=['GET', 'POST'])
 def authentification():
     if request.method == 'POST':
-        # Vérifier les identifiants
-        if request.form['username'] == 'admin' and request.form['password'] == 'password': # password à cacher par la suite
+        username = request.form['username']
+        password = request.form['password']
+        
+        # Vérification Admin OU User
+        if (username == 'admin' and password == 'password') or \
+           (username == 'user' and password == '12345'):
             session['authentifie'] = True
-            # Rediriger vers la route lecture après une authentification réussie
+            session['user_role'] = username # Optionnel : pour distinguer le rôle
             return redirect(url_for('lecture'))
         else:
-            # Afficher un message d'erreur si les identifiants sont incorrects
             return render_template('formulaire_authentification.html', error=True)
 
     return render_template('formulaire_authentification.html', error=False)
