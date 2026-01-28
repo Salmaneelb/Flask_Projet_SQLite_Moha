@@ -10,7 +10,26 @@ def get_db_connection():
     conn = sqlite3.connect(db_path)
     conn.row_factory = sqlite3.Row
     return conn
+# Page pour lister les utilisateurs (Réservé Admin)
+@app.route('/utilisateurs')
+def liste_utilisateurs():
+    if session.get('role') != 'admin':
+        return "Accès interdit", 403
+    conn = get_db_connection()
+    users = conn.execute('SELECT * FROM clients').fetchall()
+    conn.close()
+    return render_template('gestion_users.html', users=users)
 
+# Route pour supprimer un utilisateur
+@app.route('/supprimer_utilisateur/<int:id>')
+def supprimer_utilisateur(id):
+    if session.get('role') != 'admin':
+        return "Accès interdit", 403
+    conn = get_db_connection()
+    conn.execute('DELETE FROM clients WHERE id = ?', (id,))
+    conn.commit()
+    conn.close()
+    return redirect(url_for('liste_utilisateurs'))
 @app.route('/')
 def index():
     conn = get_db_connection()
