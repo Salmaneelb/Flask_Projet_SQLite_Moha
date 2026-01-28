@@ -15,7 +15,11 @@ cur.execute("INSERT INTO clients (nom, prenom, adresse) VALUES (?, ?, ?)",('LAMB
 cur.execute("INSERT INTO clients (nom, prenom, adresse) VALUES (?, ?, ?)",('GAGNON', 'Nicolas', '456, Boulevard des Cerisiers, 69003 Lyon'))
 cur.execute("INSERT INTO clients (nom, prenom, adresse) VALUES (?, ?, ?)",('DUBOIS', 'Charlotte', '789, Rue des Roses, 13005 Marseille'))
 cur.execute("INSERT INTO clients (nom, prenom, adresse) VALUES (?, ?, ?)",('LEFEVRE', 'Thomas', '333, Rue de la Paix, 75002 Paris'))
-
+# Création des comptes par défaut
+cur.execute("INSERT INTO clients (nom, prenom, username, password, role) VALUES (?, ?, ?, ?, ?)",
+            ('Admin', 'System', 'admin', 'password', 'admin'))
+cur.execute("INSERT INTO clients (nom, prenom, username, password, role) VALUES (?, ?, ?, ?, ?)",
+            ('Dupont', 'Jean', 'user', '12345', 'user'))
 #Ajouts des livres
 cur.execute("INSERT INTO livres (titre, auteur, stock) VALUES (?, ?, ?)", ('Le Petit Prince', 'Saint-Exupéry', 5))
 cur.execute("INSERT INTO livres (titre, auteur, stock) VALUES (?, ?, ?)", ('1984', 'George Orwell', 2))
