@@ -6,6 +6,7 @@ CREATE TABLE clients (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     nom TEXT NOT NULL,
     prenom TEXT NOT NULL,
+    username TEXT NOT NULL,
     password TEXT NOT NULL,
     role TEXT NOT NULL
 );
