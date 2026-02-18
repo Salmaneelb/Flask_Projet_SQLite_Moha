@@ -5,6 +5,7 @@ import os
 app = Flask(__name__)
 app.secret_key = b'_5#y2L"F4Q8z\n\xec]/'
 
+
 def get_db_connection():
     db_path = os.path.join(os.path.dirname(__file__), 'database.db')
     conn = sqlite3.connect(db_path)
