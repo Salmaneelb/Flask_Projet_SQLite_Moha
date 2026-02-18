@@ -10,17 +10,20 @@
     <div class="container">
         <a class="navbar-brand fw-bold" href="/">📚 Ma Bibliothèque</a>
         <div class="navbar-nav ms-auto align-items-center">
-            {% if session.username %}
-                {% if session.role == 'admin' %}
-                    <a class="btn btn-warning btn-sm me-2 fw-bold" href="/ajouter_livre">➕ Ajouter Livre</a>
-                    <a class="btn btn-info btn-sm me-2 fw-bold text-white" href="/utilisateurs">👥 Gérer Users</a>
-                {% endif %}
-                <span class="navbar-text me-3 text-dark">Bonjour, <strong>{{ session.username }}</strong></span>
-                <a href="/deconnexion" class="btn btn-outline-danger btn-sm">Déconnexion</a>
-            {% else %}
-                <a href="/authentification" class="btn btn-primary btn-sm">Connexion</a>
-            {% endif %}
-        </div>
+    {% if session.username %}
+        <a class="btn btn-outline-primary btn-sm me-2 fw-bold" href="/taches">📝 Mes Tâches</a>
+        
+        {% if session.role == 'admin' %}
+            <a class="btn btn-warning btn-sm me-2 fw-bold" href="/ajouter_livre">➕ Ajouter Livre</a>
+            <a class="btn btn-info btn-sm me-2 fw-bold text-white" href="/utilisateurs">👥 Gérer Users</a>
+        {% endif %}
+        
+        <span class="navbar-text me-3 text-dark">Bonjour, <strong>{{ session.username }}</strong></span>
+        <a href="/deconnexion" class="btn btn-outline-danger btn-sm">Déconnexion</a>
+    {% else %}
+        <a href="/authentification" class="btn btn-primary btn-sm">Connexion</a>
+    {% endif %}
+</div>
     </div>
 </nav>
     <div class="container">
