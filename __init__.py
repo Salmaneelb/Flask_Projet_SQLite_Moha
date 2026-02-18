@@ -81,6 +81,54 @@ def emprunter(id_livre):
         conn.commit()
     conn.close()
     return redirect(url_for('index'))
+    
+    # --- GESTION DES TÂCHES (Nouveau) ---
+
+@app.route('/taches')
+def liste_taches():
+    if not session.get('authentifie'):
+        return redirect(url_for('authentification'))
+    conn = get_db_connection()
+    # On ne récupère que les tâches de l'utilisateur connecté [cite: 7]
+    taches = conn.execute('SELECT * FROM tâches WHERE id_client = ?', (session['user_id'],)).fetchall()
+    conn.close()
+    return render_template('gestion_taches.html', taches=taches)
+
+@app.route('/ajouter_tache', methods=['GET', 'POST'])
+def ajouter_tache():
+    if not session.get('authentifie'):
+        return redirect(url_for('authentification'))
+    if request.method == 'POST':
+        titre = request.form['titre']
+        description = request.form['description']
+        date_echeance = request.form['date_echeance']
+        conn = get_db_connection()
+        conn.execute('INSERT INTO tâches (titre, description, date_echeance, id_client) VALUES (?, ?, ?, ?)',
+                     (titre, description, date_echeance, session['user_id']))
+        conn.commit()
+        conn.close()
+        return redirect(url_for('liste_taches'))
+    return render_template('formulaire_tache.html')
+
+@app.route('/terminer_tache/<int:id>')
+def terminer_tache(id):
+    conn = get_db_connection()
+    conn.execute('UPDATE tâches SET statut = 1 WHERE id = ? AND id_client = ?', (id, session['user_id']))
+    conn.commit()
+    conn.close()
+    return redirect(url_for('liste_taches'))
+
+@app.route('/supprimer_tache/<int:id>')
+def supprimer_tache(id):
+    conn = get_db_connection()
+    conn.execute('DELETE FROM tâches WHERE id = ? AND id_client = ?', (id, session['user_id']))
+    conn.commit()
+    conn.close()
+    return redirect(url_for('liste_taches'))
 
 if __name__ == "__main__":
     app.run(debug=True)
+
+
+
+
