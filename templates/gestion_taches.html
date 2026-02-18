@@ -1,15 +1,93 @@
-<table class="table">
-    {% for tache in taches %}
-    <tr>
-        <td>{{ tache.titre }}</td>
-        <td>{{ tache.description }}</td>
-        <td>{{ tache.date_echeance }}</td>
-        <td>{{ "Terminée" if tache.statut == 1 else "En cours" }}</td>
-        <td>
-            <a href="/terminer_tache/{{ tache.id }}" class="btn btn-sm btn-success">Fait</a>
-            <a href="/supprimer_tache/{{ tache.id }}" class="btn btn-sm btn-danger">Supprimer</a>
-        </td>
-    </tr>
-    {% endfor %}
-</table>
-<a href="/ajouter_tache" class="btn btn-info">Ajouter une tâche</a>
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>Mes Tâches | Dashboard</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        body { background-color: #f4f7f6; }
+        .task-card {
+            transition: transform 0.2s, box-shadow 0.2s;
+            border: none;
+            border-left: 5px solid #0d6efd; /* Bordure bleue pour le style */
+        }
+        .task-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.1) !important;
+        }
+        .task-done {
+            border-left: 5px solid #198754; /* Bordure verte si fini */
+            opacity: 0.8;
+            background-color: #e9ecef;
+        }
+        .navbar-custom {
+            background: linear-gradient(90deg, #1e3c72 0%, #2a5298 100%);
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar navbar-dark navbar-custom mb-5 shadow">
+        <div class="container">
+            <a class="navbar-brand fw-bold" href="/"><i class="fas fa-book-reader me-2"></i> Ma Bibliothèque</a>
+            <div class="navbar-nav ms-auto">
+                <a href="/ajouter_tache" class="btn btn-light btn-sm fw-bold shadow-sm">
+                    <i class="fas fa-plus-circle me-1"></i> Nouvelle Tâche
+                </a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container">
+        <div class="row mb-4">
+            <div class="col-12">
+                <h2 class="fw-bold text-dark border-bottom pb-2">🚀 Mes Objectifs</h2>
+            </div>
+        </div>
+
+        <div class="row">
+            {% for tache in taches %}
+            <div class="col-md-6 col-lg-4 mb-4">
+                <div class="card h-100 shadow-sm task-card {{ 'task-done' if tache['statut'] == 1 }}">
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between align-items-start mb-2">
+                            <h5 class="card-title fw-bold {{ 'text-decoration-line-through text-muted' if tache['statut'] == 1 }}">
+                                {{ tache['titre'] }}
+                            </h5>
+                            {% if tache['statut'] == 1 %}
+                                <span class="badge bg-success"><i class="fas fa-check"></i></span>
+                            {% else %}
+                                <span class="badge bg-primary">En cours</span>
+                            {% endif %}
+                        </div>
+                        
+                        <p class="card-text text-secondary mb-3">{{ tache['description'] }}</p>
+                        
+                        <div class="d-flex align-items-center text-muted small mb-3">
+                            <i class="far fa-calendar-alt me-2"></i>
+                            <span>Échéance : <strong>{{ tache['date_echeance'] }}</strong></span>
+                        </div>
+                    </div>
+                    
+                    <div class="card-footer bg-transparent border-0 d-flex justify-content-between pb-3">
+                        {% if tache['statut'] == 0 %}
+                            <a href="{{ url_for('terminer_tache', id=tache['id']) }}" class="btn btn-sm btn-outline-success rounded-pill px-3">
+                                <i class="fas fa-check-double me-1"></i> Terminer
+                            </a>
+                        {% endif %}
+                        <a href="{{ url_for('supprimer_tache', id=tache['id']) }}" class="btn btn-sm btn-outline-danger rounded-pill px-3" onclick="return confirm('Supprimer définitivement ?')">
+                            <i class="fas fa-trash-alt me-1"></i> Supprimer
+                        </a>
+                    </div>
+                </div>
+            </div>
+            {% else %}
+            <div class="col-12 text-center py-5">
+                <i class="fas fa-tasks fa-3x text-muted mb-3"></i>
+                <p class="text-muted fs-5">Aucune tâche en vue. Prends un café ! ☕</p>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</body>
+</html>
