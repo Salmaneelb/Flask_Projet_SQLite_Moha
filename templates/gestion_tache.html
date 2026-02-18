@@ -1,0 +1,15 @@
+<table class="table">
+    {% for tache in taches %}
+    <tr>
+        <td>{{ tache.titre }}</td>
+        <td>{{ tache.description }}</td>
+        <td>{{ tache.date_echeance }}</td>
+        <td>{{ "Terminée" if tache.statut == 1 else "En cours" }}</td>
+        <td>
+            <a href="/terminer_tache/{{ tache.id }}" class="btn btn-sm btn-success">Fait</a>
+            <a href="/supprimer_tache/{{ tache.id }}" class="btn btn-sm btn-danger">Supprimer</a>
+        </td>
+    </tr>
+    {% endfor %}
+</table>
+<a href="/ajouter_tache" class="btn btn-info">Ajouter une tâche</a>
