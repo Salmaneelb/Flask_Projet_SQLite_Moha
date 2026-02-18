@@ -30,3 +30,14 @@ CREATE TABLE emprunts (
     FOREIGN KEY (id_client) REFERENCES clients (id),
     FOREIGN KEY (id_livre) REFERENCES livres (id)
 );
+
+-- Table pour les tâches (Ajout selon le PDF)
+CREATE TABLE tâches (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    titre TEXT NOT NULL,
+    description TEXT,
+    date_echeance DATE,
+    statut INTEGER DEFAULT 0, -- 0 pour en cours, 1 pour terminée
+    id_client INTEGER,
+    FOREIGN KEY (id_client) REFERENCES clients (id)
+);
